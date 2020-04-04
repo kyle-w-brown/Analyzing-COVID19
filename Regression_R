@@ -1,0 +1,779 @@
+# Regression with our dataset in repo
+
+covid_all_confirmed = read.csv("https://raw.githubusercontent.com/WorldCapital/COVID19-Project/master/COVID19_Confirmed.csv")
+
+# Regression COVID using Deaths
+
+fit <- lm(Deaths ~ Asthma_Total + Confirmed + Population_2018, data=covid_all_confirmed) 
+summary(fit) # show results
+
+#Residuals:
+#  Min       1Q   Median       3Q      Max 
+#-101.660   -6.172   -0.091    8.106  132.074 
+
+#Coefficients:
+#  Estimate Std. Error t value Pr(>|t|)    
+#(Intercept)     -1.609e+00  8.031e+00  -0.200    0.842    
+#Asthma_Total     1.140e-04  8.629e-05   1.321    0.193    
+#Confirmed        2.541e-02  5.430e-04  46.797   <2e-16 ***
+#  Population_2018 -8.720e-06  5.490e-06  -1.588    0.119    
+#---
+#  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+#Residual standard error: 38.99 on 47 degrees of freedom
+#Multiple R-squared:  0.9877,	Adjusted R-squared:  0.9869 
+#F-statistic:  1256 on 3 and 47 DF,  p-value: < 2.2e-16
+
+
+modelSummary <- summary(fit)  # capture model summary as an object
+modelCoeffs <- modelSummary$coefficients  # model coefficients
+beta.estimate <- modelCoeffs["Confirmed", "Estimate"]  # get beta estimate for speed
+std.error <- modelCoeffs["Confirmed", "Std. Error"]  # get std.error for speed
+t_value <- beta.estimate/std.error  # calc t statistic
+p_value <- 2*pt(-abs(t_value), df=nrow(cars)-ncol(cars))  # calc p Value
+f_statistic <- fit$fstatistic[1]  # fstatistic
+f <- summary(fit)$fstatistic  # parameters for model p-value calc
+model_p <- pf(f[1], f[2], f[3], lower=FALSE)
+
+t_value
+#> t_value
+#[1] 46.79714
+
+p_value
+#> p_value
+#[1] 1.039563e-41
+
+f
+#> f
+#value    numdf    dendf 
+#1256.462    3.000   47.000 
+
+model_p
+#> model_p
+#value 
+#7.374166e-45
+
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+fit1 <- lm(Deaths ~  Unemployed +Poverty +	Median_Income +	Adult_Binge_Drinking_Pct + Adult_Nutrition +	Adult_Obesity, data=covid_all_confirmed) 
+summary(fit1) # show results
+
+# Call:
+#  lm(formula = Deaths ~ Unemployed + Poverty + Median_Income + 
+#       Adult_Binge_Drinking_Pct + Adult_Nutrition + Adult_Obesity, 
+#     data = covid_all_confirmed)
+
+#Residuals:
+#  Min      1Q  Median      3Q     Max 
+#-451.88 -102.84  -35.85   19.55 2041.44 
+
+#Coefficients:
+#  Estimate Std. Error t value Pr(>|t|)
+#(Intercept)              -1.855e+02  1.154e+03  -0.161    0.873
+#Unemployed                2.905e+01  8.282e+01   0.351    0.727
+#Poverty                   2.303e+01  3.860e+01   0.597    0.554
+#Median_Income             7.207e-03  9.356e-03   0.770    0.445
+#Adult_Binge_Drinking_Pct -9.755e+00  1.821e+01  -0.536    0.595
+#Adult_Nutrition           2.979e+01  2.277e+01   1.308    0.198
+#Adult_Obesity            -3.536e+01  2.362e+01  -1.497    0.142
+
+#Residual standard error: 341.9 on 44 degrees of freedom
+#Multiple R-squared:  0.1135,	Adjusted R-squared:  -0.007339 
+#F-statistic: 0.9393 on 6 and 44 DF,  p-value: 0.4769
+
+
+
+modelSummary <- summary(fit1)  # capture model summary as an object
+modelCoeffs <- modelSummary$coefficients  # model coefficients
+beta.estimate <- modelCoeffs["Deaths", "Estimate"]  # get beta estimate 
+std.error <- modelCoeffs["Confirmed", "Std. Error"]  # get std.error 
+t_value <- beta.estimate/std.error  # calc t statistic
+p_value <- 2*pt(-abs(t_value), df=nrow(Deaths)-ncol(Deaths))  # calc p Value
+f_statistic <- fit1$fstatistic[1]  # fstatistic
+f <- summary(fit1)$fstatistic  # parameters for model p-value calc
+model_p <- pf(f[1], f[2], f[3], lower=FALSE)
+
+t_value
+#> t_value
+#[1] 46.79714
+
+p_value
+#> p_value
+#[1] 1.039563e-41
+
+f
+#> f
+#value    numdf    dendf 
+#1256.462    3.000   47.000 
+
+model_p
+#> model_p
+#value 
+#7.374166e-45
+
+
+#------------------------------------------------------------------------
+
+fit2 <- lm(Deaths ~  Adult_Physical_Activity	+ Adult_Smoking+	Cancer_Death_Rate+	Child_Vaccination_Coverage	+State_Standardized_Infection_Ratios	+Colorectal_Cancer_Screening_Pct +	Diagnosed_Diabetes_Pct +	Diagnosed_High_Cholesterol_Pct, data=covid_all_confirmed) 
+summary(fit2) # show results
+
+#Call:
+#  lm(formula = Deaths ~ Adult_Physical_Activity + Adult_Smoking + 
+#       Cancer_Death_Rate + Child_Vaccination_Coverage + State_Standardized_Infection_Ratios + 
+#       Colorectal_Cancer_Screening_Pct + Diagnosed_Diabetes_Pct + 
+#       Diagnosed_High_Cholesterol_Pct, data = covid_all_confirmed)
+
+#Residuals:
+#  Min      1Q  Median      3Q     Max 
+#-367.11 -139.79  -25.26   34.37 2017.20 
+
+#Coefficients:
+#  Estimate Std. Error t value Pr(>|t|)
+#(Intercept)                         1306.016   2148.699   0.608    0.547
+#Adult_Physical_Activity              -14.117     14.066  -1.004    0.321
+#Adult_Smoking                        -23.496     28.368  -0.828    0.412
+#Cancer_Death_Rate                     -4.931      7.047  -0.700    0.488
+#Child_Vaccination_Coverage            -9.851     14.258  -0.691    0.493
+#State_Standardized_Infection_Ratios  220.940    352.493   0.627    0.534
+#Colorectal_Cancer_Screening_Pct        5.210     13.297   0.392    0.697
+#Diagnosed_Diabetes_Pct                -4.858     61.371  -0.079    0.937
+#Diagnosed_High_Cholesterol_Pct        26.473     30.882   0.857    0.396
+
+#Residual standard error: 349.8 on 42 degrees of freedom
+#Multiple R-squared:  0.1141,	Adjusted R-squared:  -0.05469 
+#F-statistic: 0.6759 on 8 and 42 DF,  p-value: 0.7098
+
+#--------------------------------------------------------------------------------------------
+
+fit3 <- lm(Deaths ~  Diagnosed_Hypertension_Pct	+ Drug_Poisioning_Death_Rate + Heart_Disease_Death_Rate + Hepatitis_B_Cases + HIV_Diagnosis_Rate	+Infant_Morality_Rate	+Influenza_Vaccination_Coverage +	Medicated_Hypertension	+Motor_Vehicle_Death_Rate+	Observed_Seat_Belt_Use+	Stroke_Death_Rate+	Suicide_Death_Rate, data=covid_all_confirmed) 
+summary(fit3) # show results
+
+
+#Residuals:
+#  Min      1Q  Median      3Q     Max 
+#-579.78  -83.31    0.00   70.39  702.28 
+
+#Coefficients:
+#  Estimate Std. Error t value Pr(>|t|)   
+#(Intercept)                     -68.635   2558.427  -0.027  0.97888   
+#Diagnosed_Hypertension_Pct       15.049     39.816   0.378  0.70964   
+#Drug_Poisioning_Death_Rate      -24.825     12.050  -2.060  0.05335 . 
+#Heart_Disease_Death_Rate         16.020      4.347   3.685  0.00157 **
+#Hepatitis_B_Cases0.1            101.736    438.216   0.232  0.81890   
+#Hepatitis_B_Cases0.2           -164.211    436.294  -0.376  0.71081   
+#Hepatitis_B_Cases0.3            247.569    445.813   0.555  0.58516   
+#Hepatitis_B_Cases0.4            200.824    398.911   0.503  0.62045   
+#Hepatitis_B_Cases0.5            105.452    409.991   0.257  0.79979   
+#Hepatitis_B_Cases0.6            162.424    458.217   0.354  0.72689   
+#Hepatitis_B_Cases0.7            139.578    430.903   0.324  0.74954   
+#Hepatitis_B_Cases0.8            293.238    463.754   0.632  0.53472   
+#Hepatitis_B_Cases0.9           -380.603    462.860  -0.822  0.42111   
+#Hepatitis_B_Cases1              290.572    578.225   0.503  0.62107   
+#Hepatitis_B_Cases1.2            200.026    530.489   0.377  0.71031   
+#Hepatitis_B_Cases1.6            669.557    556.666   1.203  0.24383   
+#Hepatitis_B_Cases1.7            210.168    661.821   0.318  0.75428   
+#Hepatitis_B_Cases1.9            194.956    681.786   0.286  0.77801   
+#Hepatitis_B_Cases14.7           813.162    581.292   1.399  0.17796   
+#Hepatitis_B_Cases2              255.799    511.342   0.500  0.62264   
+#Hepatitis_B_Cases2.1            252.492    555.177   0.455  0.65441   
+#Hepatitis_B_Cases3.5            493.307    483.444   1.020  0.32036   
+#Hepatitis_B_Cases3.7            266.098    526.781   0.505  0.61927   
+#Hepatitis_B_CasesN/A           -457.678    423.758  -1.080  0.29364   
+#HIV_Diagnosis_Rate               13.757      9.510   1.447  0.16431   
+#Infant_Morality_Rate           -144.380    115.692  -1.248  0.22721   
+#Influenza_Vaccination_Coverage    6.876     19.899   0.346  0.73350   
+#Medicated_Hypertension           -7.799     27.673  -0.282  0.78111   
+#Motor_Vehicle_Death_Rate          2.120     25.605   0.083  0.93487   
+#Observed_Seat_Belt_Use           11.382     10.158   1.120  0.27648   
+#Stroke_Death_Rate               -78.275     21.054  -3.718  0.00146 **
+#Suicide_Death_Rate               12.570     31.150   0.404  0.69105   
+#---
+#  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+# Residual standard error: 301.4 on 19 degrees of freedom
+# Multiple R-squared:  0.7026,	Adjusted R-squared:  0.2173 
+#F-statistic: 1.448 on 31 and 19 DF,  p-value: 0.2003
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+fit4 <- lm(Deaths ~  Teen_Birth_Rate + Youth_Binge_Drinking + Youth_Marijuana_Use + Youth_Nutrition + Youth_Obesity + Youth_Physical_Activity + Youth_Seat_Belt_Use + Youth_Smoking, data=covid_all_confirmed) 
+summary(fit4) # show results
+print(fit4)
+
+#Call:
+#  lm(formula = Deaths ~ Teen_Birth_Rate + Youth_Binge_Drinking + 
+#       Youth_Marijuana_Use + Youth_Nutrition + Youth_Obesity + Youth_Physical_Activity + 
+#       Youth_Seat_Belt_Use + Youth_Smoking, data = covid_all_confirmed)
+
+#Residuals:
+#  Min     1Q Median     3Q    Max 
+#-123.2    0.0    0.0    0.0  398.0 
+
+#Coefficients: (172 not defined because of singularities)
+#Estimate Std. Error t value Pr(>|t|)    
+#(Intercept)                    66.6767   202.9493   0.329    0.749    
+#Teen_Birth_Rate                -1.3955     6.3858  -0.219    0.831    
+#Youth_Binge_Drinking11.5        4.0943   242.7449   0.017    0.987    
+#Youth_Binge_Drinking11.7      -36.6514   234.3342  -0.156    0.879    
+#Youth_Binge_Drinking12.5      379.7678   234.6542   1.618    0.134    
+#Youth_Binge_Drinking12.8      -32.6282   234.6081  -0.139    0.892    
+#Youth_Binge_Drinking13.1       -5.8373   234.0513  -0.025    0.981    
+#Youth_Binge_Drinking13.4      -33.4413   235.9367  -0.142    0.890    
+#Youth_Binge_Drinking13.9       -9.5340   238.8704  -0.040    0.969    
+#Youth_Binge_Drinking14         61.3713   238.1318   0.258    0.801    
+#Youth_Binge_Drinking14.3      -28.1153   239.2619  -0.118    0.909    
+#Youth_Binge_Drinking14.6       -7.9279   264.7876  -0.030    0.977    
+#Youth_Binge_Drinking14.8      -25.7904   234.4804  -0.110    0.914    
+#Youth_Binge_Drinking15.1      200.7678   234.6542   0.856    0.410    
+#Youth_Binge_Drinking15.3      128.7214   235.4799   0.547    0.596    
+#Youth_Binge_Drinking15.4       50.2559   234.0905   0.215    0.834    
+#Youth_Binge_Drinking15.6     2328.7904   234.4804   9.932 7.92e-07 ***
+#Youth_Binge_Drinking15.8       11.0943   242.7449   0.046    0.964    
+#Youth_Binge_Drinking15.9      128.1401   235.7006   0.544    0.598    
+#Youth_Binge_Drinking16        -29.8610   235.5518  -0.127    0.901    
+#Youth_Binge_Drinking16.1        9.9784   249.6149   0.040    0.969    
+#Youth_Binge_Drinking16.3        0.4444   270.0371   0.002    0.999    
+#Youth_Binge_Drinking16.5       21.0490   266.9082   0.079    0.939    
+#Youth_Binge_Drinking16.8      -48.3265   238.7432  -0.202    0.843    
+#Youth_Binge_Drinking17.4       50.3965   241.9161   0.208    0.839    
+#Youth_Binge_Drinking17.6      -30.3249   236.6408  -0.128    0.900    
+#Youth_Binge_Drinking17.7      102.1153   239.2619   0.427    0.678    
+#Youth_Binge_Drinking19          7.0479   245.2717   0.029    0.978    
+#Youth_Binge_Drinking19.5       -6.7199   240.6723  -0.028    0.978    
+#Youth_Binge_Drinking19.7      -24.6730   245.6571  -0.100    0.922    
+#Youth_Binge_Drinking19.8      -13.6024   261.2902  -0.052    0.959    
+#Youth_Binge_Drinking20.7      -23.8362   239.5310  -0.100    0.923    
+#Youth_Binge_Drinking8.3       -15.0453   242.5760  -0.062    0.952    
+#Youth_Binge_DrinkingN/A        90.5927   174.2930   0.520    0.614    
+#Youth_Marijuana_Use13.7        -2.5819   235.4098  -0.011    0.991    
+#Youth_Marijuana_Use15.2             NA         NA      NA       NA    
+#Youth_Marijuana_Use16.2             NA         NA      NA       NA    
+#Youth_Marijuana_Use16.3             NA         NA      NA       NA    
+#Youth_Marijuana_Use16.4             NA         NA      NA       NA    
+#Youth_Marijuana_Use16.5             NA         NA      NA       NA    
+#Youth_Marijuana_Use17       -2354.0922   238.3714  -9.876 8.38e-07 ***
+#Youth_Marijuana_Use17.2       -88.5319   282.2118  -0.314    0.760    
+#Youth_Marijuana_Use17.3             NA         NA      NA       NA    
+#Youth_Marijuana_Use17.5             NA         NA      NA       NA    
+#Youth_Marijuana_Use17.8             NA         NA      NA       NA    
+#Youth_Marijuana_Use18.2             NA         NA      NA       NA    
+#Youth_Marijuana_Use18.3             NA         NA      NA       NA    
+#Youth_Marijuana_Use18.7             NA         NA      NA       NA    
+#Youth_Marijuana_Use18.8             NA         NA      NA       NA    
+#Youth_Marijuana_Use19        -404.6503   237.8988  -1.701    0.117    
+#Youth_Marijuana_Use19.3             NA         NA      NA       NA    
+#Youth_Marijuana_Use19.4             NA         NA      NA       NA    
+#Youth_Marijuana_Use19.5             NA         NA      NA       NA    
+#Youth_Marijuana_Use19.7      -116.3702   254.0909  -0.458    0.656    
+#Youth_Marijuana_Use19.9             NA         NA      NA       NA    
+#Youth_Marijuana_Use20.4             NA         NA      NA       NA    
+#Youth_Marijuana_Use21.5             NA         NA      NA       NA    
+#Youth_Marijuana_Use22.2             NA         NA      NA       NA    
+#Youth_Marijuana_Use22.3             NA         NA      NA       NA    
+#Youth_Marijuana_Use22.4             NA         NA      NA       NA    
+#Youth_Marijuana_Use22.9             NA         NA      NA       NA    
+#Youth_Marijuana_Use23.3             NA         NA      NA       NA    
+#Youth_Marijuana_Use23.6             NA         NA      NA       NA    
+#Youth_Marijuana_Use24.5             NA         NA      NA       NA    
+#Youth_Marijuana_Use25.3             NA         NA      NA       NA    
+#Youth_Marijuana_Use28.7             NA         NA      NA       NA    
+#Youth_Marijuana_UseN/A              NA         NA      NA       NA    
+#Youth_Nutrition10.5                 NA         NA      NA       NA    
+#Youth_Nutrition10.7                 NA         NA      NA       NA    
+#Youth_Nutrition11.1                 NA         NA      NA       NA    
+#Youth_Nutrition11.3                 NA         NA      NA       NA    
+#Youth_Nutrition11.9                 NA         NA      NA       NA    
+#Youth_Nutrition12                   NA         NA      NA       NA    
+#Youth_Nutrition12.1                 NA         NA      NA       NA    
+#Youth_Nutrition12.4                 NA         NA      NA       NA    
+#Youth_Nutrition12.5                 NA         NA      NA       NA    
+#Youth_Nutrition12.7                 NA         NA      NA       NA    
+#Youth_Nutrition12.8                 NA         NA      NA       NA    
+#Youth_Nutrition12.9                 NA         NA      NA       NA    
+#Youth_Nutrition13.2                 NA         NA      NA       NA    
+#Youth_Nutrition13.3                 NA         NA      NA       NA    
+#Youth_Nutrition13.4                 NA         NA      NA       NA    
+#Youth_Nutrition13.8                 NA         NA      NA       NA    
+#Youth_Nutrition13.9                 NA         NA      NA       NA    
+#Youth_Nutrition14.2                 NA         NA      NA       NA    
+#Youth_Nutrition14.7                 NA         NA      NA       NA    
+#Youth_Nutrition15.5                 NA         NA      NA       NA    
+#Youth_Nutrition15.9                 NA         NA      NA       NA    
+#Youth_Nutrition16.4                 NA         NA      NA       NA    
+#Youth_Nutrition18.1                 NA         NA      NA       NA    
+#Youth_Nutrition9.1                  NA         NA      NA       NA    
+#Youth_Nutrition9.7            -75.2188   183.0588  -0.411    0.689    
+#Youth_Nutrition9.8                  NA         NA      NA       NA    
+#Youth_NutritionN/A                  NA         NA      NA       NA    
+#Youth_Obesity10.9                   NA         NA      NA       NA    
+#Youth_Obesity11                     NA         NA      NA       NA    
+#Youth_Obesity11.1                   NA         NA      NA       NA    
+#Youth_Obesity11.5                   NA         NA      NA       NA    
+#Youth_Obesity12                     NA         NA      NA       NA    
+#Youth_Obesity12.2                   NA         NA      NA       NA    
+#Youth_Obesity12.3                   NA         NA      NA       NA    
+#Youth_Obesity12.4                   NA         NA      NA       NA    
+#Youth_Obesity12.6                   NA         NA      NA       NA    
+#Youth_Obesity12.9                   NA         NA      NA       NA    
+#Youth_Obesity13                     NA         NA      NA       NA    
+#Youth_Obesity13.1                   NA         NA      NA       NA    
+#Youth_Obesity13.3                   NA         NA      NA       NA    
+#Youth_Obesity13.6                   NA         NA      NA       NA    
+#Youth_Obesity13.9                   NA         NA      NA       NA    
+#Youth_Obesity14                     NA         NA      NA       NA    
+#Youth_Obesity14.3                   NA         NA      NA       NA    
+#Youth_Obesity14.7                   NA         NA      NA       NA    
+#Youth_Obesity15.1                   NA         NA      NA       NA    
+#Youth_Obesity15.6                   NA         NA      NA       NA    
+#Youth_Obesity15.8                   NA         NA      NA       NA    
+#Youth_Obesity16.1                   NA         NA      NA       NA    
+#Youth_Obesity16.3                   NA         NA      NA       NA    
+#Youth_Obesity16.4                   NA         NA      NA       NA    
+#Youth_Obesity17.3                   NA         NA      NA       NA    
+#Youth_Obesity17.9                   NA         NA      NA       NA    
+#Youth_Obesity18                     NA         NA      NA       NA    
+#Youth_Obesity18.5                   NA         NA      NA       NA    
+#Youth_Obesity18.6                   NA         NA      NA       NA    
+#Youth_Obesity18.9                   NA         NA      NA       NA    
+#Youth_ObesityN/A                    NA         NA      NA       NA    
+#Youth_Physical_Activity34.2         NA         NA      NA       NA    
+#Youth_Physical_Activity36.9         NA         NA      NA       NA    
+#Youth_Physical_Activity37           NA         NA      NA       NA    
+#Youth_Physical_Activity38.1         NA         NA      NA       NA    
+#Youth_Physical_Activity41.2         NA         NA      NA       NA    
+#Youth_Physical_Activity41.3         NA         NA      NA       NA    
+#Youth_Physical_Activity41.8         NA         NA      NA       NA    
+#Youth_Physical_Activity41.9         NA         NA      NA       NA    
+#Youth_Physical_Activity42.3         NA         NA      NA       NA    
+#Youth_Physical_Activity42.7         NA         NA      NA       NA    
+#Youth_Physical_Activity43.3         NA         NA      NA       NA    
+#Youth_Physical_Activity43.4         NA         NA      NA       NA    
+#Youth_Physical_Activity43.7         NA         NA      NA       NA    
+#Youth_Physical_Activity44.2         NA         NA      NA       NA    
+#Youth_Physical_Activity44.9         NA         NA      NA       NA    
+#Youth_Physical_Activity45.2         NA         NA      NA       NA    
+#Youth_Physical_Activity45.3         NA         NA      NA       NA    
+#Youth_Physical_Activity45.6         NA         NA      NA       NA    
+#Youth_Physical_Activity45.7         NA         NA      NA       NA    
+#Youth_Physical_Activity45.8         NA         NA      NA       NA    
+#Youth_Physical_Activity46           NA         NA      NA       NA    
+#Youth_Physical_Activity46.4         NA         NA      NA       NA    
+#Youth_Physical_Activity46.5         NA         NA      NA       NA    
+#Youth_Physical_Activity46.9         NA         NA      NA       NA    
+#Youth_Physical_Activity47.4         NA         NA      NA       NA    
+#Youth_Physical_Activity48.1         NA         NA      NA       NA    
+#Youth_Physical_Activity49.6         NA         NA      NA       NA    
+#Youth_Physical_Activity50.6         NA         NA      NA       NA    
+#Youth_Physical_Activity50.7         NA         NA      NA       NA    
+#Youth_Physical_Activity51.3         NA         NA      NA       NA    
+#Youth_Physical_Activity52.2         NA         NA      NA       NA    
+#Youth_Physical_Activity52.8         NA         NA      NA       NA    
+#Youth_Physical_Activity53.1         NA         NA      NA       NA    
+#Youth_Physical_Activity54           NA         NA      NA       NA    
+#Youth_Physical_ActivityN/A          NA         NA      NA       NA    
+#Youth_Seat_Belt_Use88.7             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use88.8             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use88.9             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use89.1             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use89.3             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use89.6             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use90.5             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use90.6             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use90.9             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use91.5             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use91.7             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use91.8             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use91.9             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use92.7             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use93.4             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use93.5             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use93.7             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use93.8             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use94               NA         NA      NA       NA    
+#Youth_Seat_Belt_Use94.1             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use94.3             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use94.7             NA         NA      NA       NA    
+#Youth_Seat_Belt_Use96.4             NA         NA      NA       NA    
+#Youth_Seat_Belt_UseN/A              NA         NA      NA       NA    
+#Youth_Smoking10.1                   NA         NA      NA       NA    
+#Youth_Smoking10.3                   NA         NA      NA       NA    
+#Youth_Smoking10.8                   NA         NA      NA       NA    
+#Youth_Smoking11                     NA         NA      NA       NA    
+#Youth_Smoking11.1                   NA         NA      NA       NA    
+#Youth_Smoking11.2                   NA         NA      NA       NA    
+#Youth_Smoking11.4                   NA         NA      NA       NA    
+#Youth_Smoking11.5                   NA         NA      NA       NA    
+#Youth_Smoking11.7                   NA         NA      NA       NA    
+#Youth_Smoking12.9                   NA         NA      NA       NA    
+#Youth_Smoking13.1                   NA         NA      NA       NA    
+#Youth_Smoking13.3                   NA         NA      NA       NA    
+#Youth_Smoking14                     NA         NA      NA       NA    
+#Youth_Smoking15.2                   NA         NA      NA       NA    
+#Youth_Smoking15.7                   NA         NA      NA       NA    
+#Youth_Smoking16.9                   NA         NA      NA       NA    
+#[ reached getOption("max.print") -- omitted 12 rows ]
+#---
+#  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+#Residual standard error: 165.5 on 11 degrees of freedom
+#Multiple R-squared:  0.9481,	Adjusted R-squared:  0.764 
+#F-statistic:  5.15 on 39 and 11 DF,  p-value: 0.002937
+
+#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+# Regression for Confirmed Cases
+
+fit <- lm(Confirmed ~ Asthma_Total + Deaths + Population_2018, data=covid_all_confirmed) 
+summary(fit) # show results
+
+
+#Residuals:
+#  Min      1Q  Median      3Q     Max 
+#-5343.7  -257.1    25.3   225.6  4368.5 
+
+#Coefficients:
+#  Estimate Std. Error t value Pr(>|t|)    
+#(Intercept)     -9.431e+00  3.128e+02  -0.030    0.976    
+#Asthma_Total    -2.564e-03  3.401e-03  -0.754    0.455    
+#Deaths           3.852e+01  8.232e-01  46.797   <2e-16 ***
+#  Population_2018  2.318e-04  2.168e-04   1.069    0.290    
+#---
+#  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+#Residual standard error: 1518 on 47 degrees of freedom
+#Multiple R-squared:  0.9877,	Adjusted R-squared:  0.987 
+#F-statistic:  1262 on 3 and 47 DF,  p-value: < 2.2e-16
+
+
+modelSummary <- summary(fit)  # capture model summary as an object
+modelCoeffs <- modelSummary$coefficients  # model coefficients
+beta.estimate <- modelCoeffs["Deaths", "Estimate"]  # get beta estimate for speed
+std.error <- modelCoeffs["Deaths", "Std. Error"]  # get std.error for speed
+t_value <- beta.estimate/std.error  # calc t statistic
+p_value <- 2*pt(-abs(t_value), df=nrow(cars)-ncol(cars))  # calc p Value
+f_statistic <- fit$fstatistic[1]  # fstatistic
+f <- summary(fit)$fstatistic  # parameters for model p-value calc
+model_p <- pf(f[1], f[2], f[3], lower=FALSE)
+
+t_value
+#> t_value
+#[1] 46.79714
+
+p_value
+#> p_value
+#[1] 1.039563e-41
+
+f
+#> f
+#value    numdf    dendf 
+#1261.586    3.000   47.000 
+
+model_p
+#> model_p
+#value 
+#6.709632e-45 
+
+#----------------------------------------------------------------------------------------------------------------------------------
+
+fit2 <- lm(Confirmed ~  Adult_Physical_Activity	+ Adult_Smoking+	Cancer_Death_Rate+	Child_Vaccination_Coverage	+State_Standardized_Infection_Ratios	+Colorectal_Cancer_Screening_Pct +	Diagnosed_Diabetes_Pct +	Diagnosed_High_Cholesterol_Pct, data=covid_all_confirmed) 
+summary(fit2) # show results
+
+
+#Residuals:
+#  Min     1Q Median     3Q    Max 
+#-15139  -5270  -1322   2243  77469 
+#
+#Coefficients:
+#  Estimate Std. Error t value Pr(>|t|)
+#(Intercept)                          63772.1    82676.1   0.771    0.445
+#Adult_Physical_Activity               -639.5      541.2  -1.182    0.244
+#Adult_Smoking                        -1115.2     1091.5  -1.022    0.313
+#Cancer_Death_Rate                     -194.0      271.2  -0.716    0.478
+#Child_Vaccination_Coverage            -399.6      548.6  -0.728    0.470
+#State_Standardized_Infection_Ratios   8412.1    13563.0   0.620    0.538
+#Colorectal_Cancer_Screening_Pct        170.6      511.6   0.334    0.740
+#Diagnosed_Diabetes_Pct                -103.8     2361.4  -0.044    0.965
+#Diagnosed_High_Cholesterol_Pct         990.2     1188.2   0.833    0.409
+
+#Residual standard error: 13460 on 42 degrees of freedom
+#Multiple R-squared:  0.1382,	Adjusted R-squared:  -0.02595 
+#F-statistic: 0.8419 on 8 and 42 DF,  p-value: 0.5716
+
+
+
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+fit3 <- lm(Confirmed ~  Diagnosed_Hypertension_Pct	+ Drug_Poisioning_Death_Rate + Heart_Disease_Death_Rate + Hepatitis_B_Cases + HIV_Diagnosis_Rate	+Infant_Morality_Rate	+Influenza_Vaccination_Coverage +	Medicated_Hypertension	+Motor_Vehicle_Death_Rate+	Observed_Seat_Belt_Use+	Stroke_Death_Rate+	Suicide_Death_Rate, data=covid_all_confirmed) 
+summary(fit3) # show results
+
+
+
+#Residuals:
+#  Min     1Q Median     3Q    Max 
+#-21501  -3628      0   2698  27890 
+
+#Coefficients:
+#  Estimate Std. Error t value Pr(>|t|)   
+#(Intercept)                    -20311.11  101434.98  -0.200  0.84342   
+#Diagnosed_Hypertension_Pct        486.74    1578.59   0.308  0.76118   
+#Drug_Poisioning_Death_Rate       -908.47     477.76  -1.902  0.07251 . 
+#Heart_Disease_Death_Rate          573.75     172.36   3.329  0.00353 **
+#Hepatitis_B_Cases0.1             5289.54   17374.11   0.304  0.76409   
+#Hepatitis_B_Cases0.2            -5309.14   17297.92  -0.307  0.76224   
+#Hepatitis_B_Cases0.3            10163.34   17675.34   0.575  0.57204   
+#Hepatitis_B_Cases0.4            11476.82   15815.80   0.726  0.47689   
+#Hepatitis_B_Cases0.5             5548.49   16255.07   0.341  0.73659   
+#Hepatitis_B_Cases0.6             7146.99   18167.12   0.393  0.69840   
+#Hepatitis_B_Cases0.7             6801.53   17084.18   0.398  0.69498   
+#Hepatitis_B_Cases0.8            10947.58   18386.64   0.595  0.55860   
+#Hepatitis_B_Cases0.9           -10470.05   18351.20  -0.571  0.57500   
+#Hepatitis_B_Cases1               9621.04   22925.10   0.420  0.67943   
+#Hepatitis_B_Cases1.2             9230.33   21032.51   0.439  0.66571   
+#Hepatitis_B_Cases1.6            27743.35   22070.36   1.257  0.22397   
+#Hepatitis_B_Cases1.7             9996.97   26239.48   0.381  0.70744   
+#Hepatitis_B_Cases1.9             5020.44   27031.04   0.186  0.85463   
+#Hepatitis_B_Cases14.7           32106.46   23046.72   1.393  0.17967   
+#Hepatitis_B_Cases2              12020.56   20273.40   0.593  0.56022   
+#Hepatitis_B_Cases2.1            12078.97   22011.33   0.549  0.58956   
+#Hepatitis_B_Cases3.5            19704.09   19167.31   1.028  0.31686   
+#Hepatitis_B_Cases3.7            11529.43   20885.51   0.552  0.58736   
+#Hepatitis_B_CasesN/A           -15536.16   16800.91  -0.925  0.36671   
+#HIV_Diagnosis_Rate                594.18     377.04   1.576  0.13156   
+#Infant_Morality_Rate            -6379.30    4586.90  -1.391  0.18037   
+#Influenza_Vaccination_Coverage    233.74     788.95   0.296  0.77024   
+#Medicated_Hypertension             59.85    1097.17   0.055  0.95707   
+#Motor_Vehicle_Death_Rate          -52.90    1015.16  -0.052  0.95898   
+#Observed_Seat_Belt_Use            365.31     402.74   0.907  0.37574   
+#Stroke_Death_Rate               -2768.82     834.74  -3.317  0.00362 **
+#  Suicide_Death_Rate                631.41    1235.01   0.511  0.61506   
+#---
+#  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+#Residual standard error: 11950 on 19 degrees of freedom
+#Multiple R-squared:  0.6928,	Adjusted R-squared:  0.1916 
+#F-statistic: 1.382 on 31 and 19 DF,  p-value: 0.231
+
+
+
+fit4 <- lm(Confirmed ~  Teen_Birth_Rate + Youth_Binge_Drinking + Youth_Marijuana_Use + Youth_Nutrition + Youth_Obesity + Youth_Physical_Activity + Youth_Seat_Belt_Use + Youth_Smoking, data=covid_all_confirmed) 
+summary(fit4) # show results
+
+
+
+#Residuals:
+#  Min     1Q Median     3Q    Max 
+#-5086      0      0      0  19460 
+
+#Coefficients: (172 not defined because of singularities)
+#Estimate Std. Error t value Pr(>|t|)    
+#(Intercept)                   4023.48    8593.21   0.468    0.649    
+#Teen_Birth_Rate               -125.95     270.38  -0.466    0.650    
+#Youth_Binge_Drinking11.5      1120.09   10278.22   0.109    0.915    
+#Youth_Binge_Drinking11.7     -1569.30    9922.10  -0.158    0.877    
+#Youth_Binge_Drinking12.5      9425.06    9935.65   0.949    0.363    
+#Youth_Binge_Drinking12.8     -1376.47    9933.70  -0.139    0.892    
+#Youth_Binge_Drinking13.1       549.43    9910.12   0.055    0.957    
+#Youth_Binge_Drinking13.4      -858.04    9989.95  -0.086    0.933    
+#Youth_Binge_Drinking13.9      1215.62   10114.17   0.120    0.906    
+#Youth_Binge_Drinking14        1248.95   10082.90   0.124    0.904    
+#Youth_Binge_Drinking14.3      -558.59   10130.75  -0.055    0.957    
+#Youth_Binge_Drinking14.6      1125.43   11211.55   0.100    0.922    
+#Youth_Binge_Drinking14.8     -1023.32    9928.29  -0.103    0.920    
+#Youth_Binge_Drinking15.1      9407.06    9935.65   0.947    0.364    
+#Youth_Binge_Drinking15.3      7818.39    9970.61   0.784    0.450    
+#Youth_Binge_Drinking15.4      5675.35    9911.78   0.573    0.578    
+#Youth_Binge_Drinking15.6     90510.32    9928.29   9.116 1.85e-06 ***
+#Youth_Binge_Drinking15.8      1029.09   10278.22   0.100    0.922    
+#Youth_Binge_Drinking15.9      6543.18    9979.96   0.656    0.526    
+#Youth_Binge_Drinking16       -1896.99    9973.65  -0.190    0.853    
+#Youth_Binge_Drinking16.1      1239.92   10569.11   0.117    0.909    
+#Youth_Binge_Drinking16.3      1594.54   11433.82   0.139    0.892    
+#Youth_Binge_Drinking16.5      1706.59   11301.34   0.151    0.883    
+#Youth_Binge_Drinking16.8     -2322.03   10108.78  -0.230    0.823    
+#Youth_Binge_Drinking17.4      2541.12   10243.13   0.248    0.809    
+#Youth_Binge_Drinking17.6      -854.28   10019.76  -0.085    0.934    
+#Youth_Binge_Drinking17.7      6277.59   10130.75   0.620    0.548    
+#Youth_Binge_Drinking19        1457.42   10385.21   0.140    0.891    
+#Youth_Binge_Drinking19.5      1259.36   10190.47   0.124    0.904    
+#Youth_Binge_Drinking19.7       -82.39   10401.53  -0.008    0.994    
+#Youth_Binge_Drinking19.8       802.29   11063.46   0.073    0.943    
+#Youth_Binge_Drinking20.7      -457.40   10142.14  -0.045    0.965    
+#Youth_Binge_Drinking8.3        206.50   10271.07   0.020    0.984    
+#Youth_Binge_DrinkingN/A       3756.94    7379.86   0.509    0.621    
+#Youth_Marijuana_Use13.7       -422.80    9967.64  -0.042    0.967    
+#Youth_Marijuana_Use15.2            NA         NA      NA       NA    
+#Youth_Marijuana_Use16.2            NA         NA      NA       NA    
+#Youth_Marijuana_Use16.3            NA         NA      NA       NA    
+#Youth_Marijuana_Use16.4            NA         NA      NA       NA    
+#Youth_Marijuana_Use16.5            NA         NA      NA       NA    
+#Youth_Marijuana_Use17       -90835.76   10093.04  -9.000 2.10e-06 ***
+#Youth_Marijuana_Use17.2      -5085.04   11949.32  -0.426    0.679    
+#Youth_Marijuana_Use17.3            NA         NA      NA       NA    
+#Youth_Marijuana_Use17.5            NA         NA      NA       NA    
+#Youth_Marijuana_Use17.8            NA         NA      NA       NA    
+#Youth_Marijuana_Use18.2            NA         NA      NA       NA    
+#Youth_Marijuana_Use18.3            NA         NA      NA       NA    
+#Youth_Marijuana_Use18.7            NA         NA      NA       NA    
+#Youth_Marijuana_Use18.8            NA         NA      NA       NA    
+#Youth_Marijuana_Use19        -9804.14   10073.03  -0.973    0.351    
+#Youth_Marijuana_Use19.3            NA         NA      NA       NA    
+#Youth_Marijuana_Use19.4            NA         NA      NA       NA    
+#Youth_Marijuana_Use19.5            NA         NA      NA       NA    
+#Youth_Marijuana_Use19.7      -5878.78   10758.63  -0.546    0.596    
+#Youth_Marijuana_Use19.9            NA         NA      NA       NA    
+#Youth_Marijuana_Use20.4            NA         NA      NA       NA    
+#Youth_Marijuana_Use21.5            NA         NA      NA       NA    
+#Youth_Marijuana_Use22.2            NA         NA      NA       NA    
+#Youth_Marijuana_Use22.3            NA         NA      NA       NA    
+#Youth_Marijuana_Use22.4            NA         NA      NA       NA    
+#Youth_Marijuana_Use22.9            NA         NA      NA       NA    
+#Youth_Marijuana_Use23.3            NA         NA      NA       NA    
+#Youth_Marijuana_Use23.6            NA         NA      NA       NA    
+#Youth_Marijuana_Use24.5            NA         NA      NA       NA    
+#Youth_Marijuana_Use25.3            NA         NA      NA       NA    
+#Youth_Marijuana_Use28.7            NA         NA      NA       NA    
+#Youth_Marijuana_UseN/A             NA         NA      NA       NA    
+#Youth_Nutrition10.5                NA         NA      NA       NA    
+#Youth_Nutrition10.7                NA         NA      NA       NA    
+#Youth_Nutrition11.1                NA         NA      NA       NA    
+#Youth_Nutrition11.3                NA         NA      NA       NA    
+#Youth_Nutrition11.9                NA         NA      NA       NA    
+#Youth_Nutrition12                  NA         NA      NA       NA    
+#Youth_Nutrition12.1                NA         NA      NA       NA    
+#Youth_Nutrition12.4                NA         NA      NA       NA    
+#Youth_Nutrition12.5                NA         NA      NA       NA    
+#Youth_Nutrition12.7                NA         NA      NA       NA    
+#Youth_Nutrition12.8                NA         NA      NA       NA    
+#Youth_Nutrition12.9                NA         NA      NA       NA    
+#Youth_Nutrition13.2                NA         NA      NA       NA    
+#Youth_Nutrition13.3                NA         NA      NA       NA    
+#Youth_Nutrition13.4                NA         NA      NA       NA    
+#Youth_Nutrition13.8                NA         NA      NA       NA    
+#Youth_Nutrition13.9                NA         NA      NA       NA    
+#Youth_Nutrition14.2                NA         NA      NA       NA    
+#Youth_Nutrition14.7                NA         NA      NA       NA    
+#Youth_Nutrition15.5                NA         NA      NA       NA    
+#Youth_Nutrition15.9                NA         NA      NA       NA    
+#Youth_Nutrition16.4                NA         NA      NA       NA    
+#Youth_Nutrition18.1                NA         NA      NA       NA    
+#Youth_Nutrition9.1                 NA         NA      NA       NA    
+#Youth_Nutrition9.7            -779.07    7751.02  -0.101    0.922    
+#Youth_Nutrition9.8                 NA         NA      NA       NA    
+#Youth_NutritionN/A                 NA         NA      NA       NA    
+#Youth_Obesity10.9                  NA         NA      NA       NA    
+#Youth_Obesity11                    NA         NA      NA       NA    
+#Youth_Obesity11.1                  NA         NA      NA       NA    
+#Youth_Obesity11.5                  NA         NA      NA       NA    
+#Youth_Obesity12                    NA         NA      NA       NA    
+#Youth_Obesity12.2                  NA         NA      NA       NA    
+#Youth_Obesity12.3                  NA         NA      NA       NA    
+#Youth_Obesity12.4                  NA         NA      NA       NA    
+#Youth_Obesity12.6                  NA         NA      NA       NA    
+#Youth_Obesity12.9                  NA         NA      NA       NA    
+#Youth_Obesity13                    NA         NA      NA       NA    
+#Youth_Obesity13.1                  NA         NA      NA       NA    
+#Youth_Obesity13.3                  NA         NA      NA       NA    
+#Youth_Obesity13.6                  NA         NA      NA       NA    
+#Youth_Obesity13.9                  NA         NA      NA       NA    
+#Youth_Obesity14                    NA         NA      NA       NA    
+#Youth_Obesity14.3                  NA         NA      NA       NA    
+#Youth_Obesity14.7                  NA         NA      NA       NA    
+#Youth_Obesity15.1                  NA         NA      NA       NA    
+#Youth_Obesity15.6                  NA         NA      NA       NA    
+#Youth_Obesity15.8                  NA         NA      NA       NA    
+#Youth_Obesity16.1                  NA         NA      NA       NA    
+#Youth_Obesity16.3                  NA         NA      NA       NA    
+#Youth_Obesity16.4                  NA         NA      NA       NA    
+#Youth_Obesity17.3                  NA         NA      NA       NA    
+#Youth_Obesity17.9                  NA         NA      NA       NA    
+#Youth_Obesity18                    NA         NA      NA       NA    
+#Youth_Obesity18.5                  NA         NA      NA       NA    
+#Youth_Obesity18.6                  NA         NA      NA       NA    
+#Youth_Obesity18.9                  NA         NA      NA       NA    
+#Youth_ObesityN/A                   NA         NA      NA       NA    
+#Youth_Physical_Activity34.2        NA         NA      NA       NA    
+#Youth_Physical_Activity36.9        NA         NA      NA       NA    
+#Youth_Physical_Activity37          NA         NA      NA       NA    
+#Youth_Physical_Activity38.1        NA         NA      NA       NA    
+#Youth_Physical_Activity41.2        NA         NA      NA       NA    
+#Youth_Physical_Activity41.3        NA         NA      NA       NA    
+#Youth_Physical_Activity41.8        NA         NA      NA       NA    
+#Youth_Physical_Activity41.9        NA         NA      NA       NA    
+#Youth_Physical_Activity42.3        NA         NA      NA       NA    
+#Youth_Physical_Activity42.7        NA         NA      NA       NA    
+#Youth_Physical_Activity43.3        NA         NA      NA       NA    
+#Youth_Physical_Activity43.4        NA         NA      NA       NA    
+#Youth_Physical_Activity43.7        NA         NA      NA       NA    
+#Youth_Physical_Activity44.2        NA         NA      NA       NA    
+#Youth_Physical_Activity44.9        NA         NA      NA       NA    
+#Youth_Physical_Activity45.2        NA         NA      NA       NA    
+#Youth_Physical_Activity45.3        NA         NA      NA       NA    
+#Youth_Physical_Activity45.6        NA         NA      NA       NA    
+#Youth_Physical_Activity45.7        NA         NA      NA       NA    
+#Youth_Physical_Activity45.8        NA         NA      NA       NA    
+#Youth_Physical_Activity46          NA         NA      NA       NA    
+#Youth_Physical_Activity46.4        NA         NA      NA       NA    
+#Youth_Physical_Activity46.5        NA         NA      NA       NA    
+#Youth_Physical_Activity46.9        NA         NA      NA       NA    
+#Youth_Physical_Activity47.4        NA         NA      NA       NA    
+#Youth_Physical_Activity48.1        NA         NA      NA       NA    
+#Youth_Physical_Activity49.6        NA         NA      NA       NA    
+#Youth_Physical_Activity50.6        NA         NA      NA       NA    
+#Youth_Physical_Activity50.7        NA         NA      NA       NA    
+#Youth_Physical_Activity51.3        NA         NA      NA       NA    
+#Youth_Physical_Activity52.2        NA         NA      NA       NA    
+#Youth_Physical_Activity52.8        NA         NA      NA       NA    
+#Youth_Physical_Activity53.1        NA         NA      NA       NA    
+#Youth_Physical_Activity54          NA         NA      NA       NA    
+#Youth_Physical_ActivityN/A         NA         NA      NA       NA    
+#Youth_Seat_Belt_Use88.7            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use88.8            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use88.9            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use89.1            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use89.3            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use89.6            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use90.5            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use90.6            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use90.9            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use91.5            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use91.7            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use91.8            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use91.9            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use92.7            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use93.4            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use93.5            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use93.7            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use93.8            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use94              NA         NA      NA       NA    
+#Youth_Seat_Belt_Use94.1            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use94.3            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use94.7            NA         NA      NA       NA    
+#Youth_Seat_Belt_Use96.4            NA         NA      NA       NA    
+#Youth_Seat_Belt_UseN/A             NA         NA      NA       NA    
+#Youth_Smoking10.1                  NA         NA      NA       NA    
+#Youth_Smoking10.3                  NA         NA      NA       NA    
+#Youth_Smoking10.8                  NA         NA      NA       NA    
+#Youth_Smoking11                    NA         NA      NA       NA    
+#Youth_Smoking11.1                  NA         NA      NA       NA    
+#Youth_Smoking11.2                  NA         NA      NA       NA    
+#Youth_Smoking11.4                  NA         NA      NA       NA    
+#Youth_Smoking11.5                  NA         NA      NA       NA    
+#Youth_Smoking11.7                  NA         NA      NA       NA    
+#Youth_Smoking12.9                  NA         NA      NA       NA    
+#Youth_Smoking13.1                  NA         NA      NA       NA    
+#Youth_Smoking13.3                  NA         NA      NA       NA    
+#Youth_Smoking14                    NA         NA      NA       NA    
+#Youth_Smoking15.2                  NA         NA      NA       NA    
+#Youth_Smoking15.7                  NA         NA      NA       NA    
+#Youth_Smoking16.9                  NA         NA      NA       NA    
+#[ reached getOption("max.print") -- omitted 12 rows ]
+#---
+#  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+#Residual standard error: 7007 on 11 degrees of freedom
+#Multiple R-squared:  0.9388,	Adjusted R-squared:  0.722 
+#F-statistic: 4.329 on 39 and 11 DF,  p-value: 0.006235
+
