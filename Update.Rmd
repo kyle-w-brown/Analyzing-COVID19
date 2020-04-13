@@ -1,0 +1,299 @@
+---
+title: "Update"
+author: "Kyle W. Brown"
+date: "4/12/2020"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Update for Final Project
+
+Providing update for final project. So, far this has a linear and expontential regression using the STATWORX COVID19 API. This is a public API and can be accessed very simply following the commands.
+
+
+
+API link:
+https://github.com/STATWORX/covid-19-api
+
+What's completed here:
+- API stream and link to source to access for R and Python
+- GBM grid AutoML model and found some rather interested results in the cross-validation summary below.
+- Simple linear regression
+- Exponential regression found
+
+
+What needs done:
+- Expontential regression from Michigan model, maybe adjusted to reflect US.
+- Started an exponential regression of US at the very bottom to see if plausible.
+- Research the effectiveness of each plot from the models. If demonstrate colinearity, overfitting, underfitting, etc it can be added to the dashboard and part of our story and analysis. Even though these visualizations maybe statistically irrelavent, we can still use it to explain the progression of the the linear regression analysis.
+
+
+```{r}
+library(httr)
+library(jsonlite)
+library(ggplot2)
+library(ISLR)
+```
+
+
+```{r}
+# Post to API
+payload <- list(code = "US")
+response <- httr::POST(url = "https://api.statworx.com/covid",
+                       body = toJSON(payload, auto_unbox = TRUE), encode = "json")
+
+# Convert to data frame
+content <- rawToChar(response$content)
+us <- data.frame(fromJSON(content))
+str(us)
+
+```
+
+
+```{r}
+head(us)
+```
+
+
+
+```{r}
+# Post to API
+payload <- list(code = "ALL")
+response <- httr::POST(url = "https://api.statworx.com/covid",
+                       body = toJSON(payload, auto_unbox = TRUE), encode = "json")
+
+# Convert to data frame
+content <- rawToChar(response$content)
+world <- data.frame(fromJSON(content))
+
+head(world)
+```
+
+# Linear Regressions
+
+```{r}
+attach(us)
+model1 <- lm(cases_cum ~ deaths_cum)
+model1
+summary(model1)
+confint(model1)
+
+```
+
+```{r}
+predict(model1, data.frame(lstat=c(5,10,15)), interval = "confidence") 
+```
+
+```{r}
+predict(model1, data.frame(lstat=c(5,10,15)), interval = "prediction") 
+```
+```{r}
+plot(cases_cum, deaths_cum) 
+```
+```{r}
+par(mfrow = c(2,2)) 
+plot(model1) 
+```
+
+```{r}
+model2 <- lm(deaths_cum ~ cases_cum)
+model2
+summary(model2)
+confint(model2)
+```
+
+
+```{r}
+par(mfrow = c(2,2)) 
+plot(model2) 
+```
+
+
+
+
+# AutoML using R
+
+###Target = Cumulative Cases
+
+```{r}
+#> automl_leader
+#Model Details:
+#==============
+
+#H2OMultinomialModel: gbm
+#Model ID:  GBM_grid__1_AutoML_20200412_124540_model_23 
+#Model Summary: 
+#  number_of_trees number_of_internal_trees model_size_in_bytes min_depth max_depth mean_depth
+#1              31                     1426              700966         1        12    7.73492
+#  min_leaves max_leaves mean_leaves
+#1          2         52    24.08906
+
+
+#H2OMultinomialMetrics: gbm
+#** Reported on cross-validation data. **
+#** 5-fold cross-validation on training data (Metrics computed for combined holdout predictions) **
+
+#Cross-Validation Set Metrics: 
+#=====================
+
+#Extract cross-validation frame with `h2o.getFrame("automl_training_train")`
+#MSE: (Extract with `h2o.mse`) 0.6775615
+#RMSE: (Extract with `h2o.rmse`) 0.8231412
+#Logloss: (Extract with `h2o.logloss`) 2.779394
+#Mean Per-Class Error: 0.6803279
+#R^2: (Extract with `h2o.r2`) 0.998153
+#Hit Ratio Table: Extract with `h2o.hit_ratio_table(<model>,xval = TRUE)`
+#=======================================================================
+#Top-10 Hit Ratios: 
+#    k hit_ratio
+#1   1  0.333333
+#2   2  0.333333
+#3   3  0.333333
+#4   4  0.333333
+#5   5  0.333333
+#6   6  0.333333
+#7   7  0.333333
+#8   8  0.333333
+#9   9  0.333333
+#10 10  0.333333
+
+
+#Cross-Validation Metrics Summary: 
+#                              mean           sd   cv_1_valid  cv_2_valid  cv_3_valid   cv_4_valid
+#accuracy                0.33461538   0.10537027   0.46153846  0.23076923  0.23076923   0.41666666
+#err                      0.6653846   0.10537027   0.53846157   0.7692308   0.7692308    0.5833333
+#err_count                      8.4    1.5165751          7.0        10.0        10.0          7.0
+#logloss                  2.7758408   0.34117955    2.3411372   3.2307265   2.9795272     2.624038
+#max_per_class_error            1.0          0.0          1.0         1.0         1.0          1.0
+#mean_per_class_accuracy  0.8622951  0.024861887    0.8852459   0.8360656   0.8360656    0.8852459
+#mean_per_class_error    0.13770492  0.024861887  0.114754096  0.16393442  0.16393442  0.114754096
+#mse                      0.6769041   0.07867551   0.56781155  0.76306975  0.74124897    0.6414364
+#r2                       0.9980467  6.158894E-4   0.99866897   0.9981172   0.9970298      0.99807
+#rmse                    0.82160884   0.04825612    0.7535327   0.8735386  0.86095816   0.80089724
+
+#                        cv_5_valid
+#accuracy                0.33333334
+#err                      0.6666667
+#err_count                      8.0
+#logloss                  2.7037756
+#max_per_class_error            1.0
+#mean_per_class_accuracy 0.86885244
+#mean_per_class_error    0.13114753
+#mse                      0.6709537
+#r2                      0.99834746
+#rmse                     0.8191176
+```
+
+
+
+
+
+
+
+
+# Predicting Michigan COVID19 
+
+
+
+```{r}
+# read data from a csv file
+data = read.csv("https://raw.githubusercontent.com/nagdevAmruthnath/covid19-Michigan/master/covid19.csv", header = T)
+
+# view data
+head(data)
+```
+
+# Exponential Regression
+```{r}
+# create samples from the data
+samples = sample(1:16, size = 16*0.8)
+
+## Predict model based on cases and days
+
+# build an exponential regression model
+model = lm(log(Cases) ~ Day + I(Day^2) , data = data[samples,])
+
+# look at the summary of the model
+summary(model)
+```
+## Summary note the author focused on the Adjusted R^2 at the accuracy prediction and noted that the model most likely was influenced by overfitting. We can make a note of the when "telling the story."
+
+
+```{r}
+# save model
+saveRDS(model, file = "Day_TotalCases.RDS")
+
+# predict for new data
+prediction = exp(predict(model, data.frame(Day = 1:22)))
+
+
+
+# put actual and predictions into a data frame
+d2 = data.frame(Day = 1:22, floor(prediction), actual = c(data$Cases, rep(NA, 5)))
+```
+
+
+```{r}
+#Plot the data
+ggplot(d2[,1:2], aes(x = Day, y = prediction)) +
+  geom_point(colour = "blue") + 
+  geom_point(na.omit(d2[,-2]), colour = "red", mapping = aes(x = Day, y = actual)) +
+  ggtitle("COVID-19 Prediction for Michigan: Red - Actual & Blue - Prediction") +
+  theme(legend.position = c(0, 1),legend.justification = c(0, 1))+
+  scale_color_manual(values = c("blue","red")) 
+```
+
+#Started working on my own Exponential Regression following the above example. Added 'Day' as the column id and 
+```{r}
+# read data from a csv file
+#-----------------------------------------------------------------------------------
+#data <- us
+
+# view data
+#----------------------------------------------------------------------------------
+#head(data)
+
+
+# create samples from the data
+#-----------------------------------------------------------------------------------
+#samples = sample(1:104, size = 104*0.8)
+
+
+## Predict model based on cases and days
+
+# build an exponential regression model
+#-----------------------------------------------------------------------------------
+#model = lm(log(cases_cum) ~ Day + I(Day^2) , data = data[samples,])
+
+
+# look at the summary of the model
+#----------------------------------------------------------------------------------
+#summary(model1)
+
+# save model
+#---------------------------------------------------------------------------------
+#saveRDS(model, file = "Day_TotalCasesUS.RDS")
+
+# predict for new data
+#-------------------------------------------------------------------------------------
+#prediction = exp(predict(model1, data.frame(Day = 1:109))
+
+# put actual and predictions into a data frame
+#-----------------------------------------------------------------------------------
+#d2 = data.frame(Day = 1:109, floor(prediction), actual = c(data$cases_cum, rep(NA, 5)))
+#d2
+
+#Plot the data
+#-------------------------------------------------------------------------------------
+#3ggplot(d2[,1:2], aes(x = Day, y = prediction)) +
+#  geom_point(colour = "blue") + 
+#  geom_point(na.omit(d2[,-2]), colour = "red", mapping = aes(x = Day, y = actual)) +
+#  ggtitle("COVID-19 Prediction for Michigan: Red - Actual & Blue - Prediction") +
+#  theme(plot.title = element_text(hjust = 0.5))
+
+```
