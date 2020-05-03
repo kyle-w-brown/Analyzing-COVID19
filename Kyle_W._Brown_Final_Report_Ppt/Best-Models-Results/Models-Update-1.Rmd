@@ -1,0 +1,486 @@
+---
+title: "Models Update"
+author: "Kyle W. Brown"
+date: "4/17/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Linear Regressions
+
+## John Hopkins University U.S. Counties COVID-19 
+
+```{r}
+set.seed(8)
+countyUS <- read.csv("https://raw.githubusercontent.com/WorldCapital/COVID19-Project/master/COVID-19/JHU_county_time_series.csv")
+countyUS <- subset(countyUS, select = -c(X))
+countyUS <- na.omit(countyUS)
+str(countyUS)
+head(countyUS)
+```
+
+
+## Confirmed Model
+
+```{r}
+confirmedUSlm <- lm(Confirmed ~ Deaths + Recovered + FIPS + Incident_Rate + People_Tested + People_Hospitalized + Mortality_Rate + Testing_Rate + Hospitalization_Rate, data = countyUS)
+confint(confirmedUSlm)
+summary(confirmedUSlm)
+
+mse = mean(confirmedUSlm$residuals^2)
+print(paste0("MSE= ", mse))
+
+
+# Function for Root Mean Squared Error
+RMSE <- function(error) { sqrt(mean(error^2)) }
+print(paste0("RMSE= ", RMSE(confirmedUSlm$residuals)))
+
+
+par(mfrow = c(2,2)) 
+plot(confirmedUSlm)
+```
+
+## Deaths Model
+
+```{r}
+deathsUSlm <- lm(Deaths ~ Confirmed + Recovered + FIPS + Incident_Rate + People_Tested + People_Hospitalized + Mortality_Rate + Testing_Rate + Hospitalization_Rate, data = countyUS)
+confint(deathsUSlm)
+summary(deathsUSlm)
+
+mse = mean(deathsUSlm$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(deathsUSlm$residuals)))
+
+
+par(mfrow = c(2,2)) 
+plot(deathsUSlm)
+```
+
+
+## Recovered Model
+
+```{r}
+recoveredUSlm <- lm(Recovered ~ Confirmed + Deaths + FIPS + Incident_Rate + People_Tested + People_Hospitalized + Mortality_Rate + Testing_Rate + Hospitalization_Rate, data = countyUS)
+confint(recoveredUSlm)
+summary(recoveredUSlm)
+
+mse = mean(recoveredUSlm$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(recoveredUSlm$residuals)))
+
+par(mfrow = c(2,2)) 
+plot(recoveredUSlm)
+```
+
+
+## FIPS Model
+
+```{r}
+fipsUSlm <- lm(FIPS ~ Confirmed + Deaths + Recovered + Incident_Rate + People_Tested + People_Hospitalized + Mortality_Rate + Testing_Rate + Hospitalization_Rate, data = countyUS)
+confint(fipsUSlm)
+summary(fipsUSlm)
+
+mse = mean(fipsUSlm$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(fipsUSlm$residuals)))
+
+
+par(mfrow = c(2,2)) 
+plot(fipsUSlm)
+```
+
+## Incident_Rate Model
+
+```{r}
+incidentUSlm <- lm(Incident_Rate ~ Confirmed + Deaths + Recovered + FIPS + People_Tested + People_Hospitalized + Mortality_Rate + Testing_Rate + Hospitalization_Rate, data = countyUS)
+confint(incidentUSlm)
+summary(incidentUSlm)
+
+mse = mean(incidentUSlm$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(incidentUSlm$residuals)))
+
+
+par(mfrow = c(2,2)) 
+plot(incidentUSlm)
+```
+
+
+## People_Tested Model 
+
+```{r}
+testedUSlm <- lm(People_Tested ~ Confirmed + Deaths + Recovered + FIPS + Incident_Rate  + People_Hospitalized + Mortality_Rate + Testing_Rate + Hospitalization_Rate, data = countyUS)
+confint(testedUSlm)
+summary(testedUSlm)
+
+mse = mean(testedUSlm$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(testedUSlm$residuals)))
+
+par(mfrow = c(2,2)) 
+plot(testedUSlm)
+```
+
+
+## People_Hospitalized Model
+
+```{r}
+hospUSlm <- lm(People_Hospitalized ~ Confirmed + Deaths + Recovered + FIPS + Incident_Rate  + People_Tested  + Mortality_Rate + Testing_Rate + Hospitalization_Rate, data = countyUS)
+confint(hospUSlm)
+summary(hospUSlm)
+
+mse = mean(hospUSlm$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(hospUSlm$residuals)))
+
+
+par(mfrow = c(2,2)) 
+plot(hospUSlm)
+```
+
+
+
+## Mortal_Rate Model
+
+```{r}
+mortalUSlm <- lm(Mortality_Rate ~ Confirmed + Deaths + Recovered + FIPS + Incident_Rate  + People_Tested  + People_Hospitalized  + Testing_Rate + Hospitalization_Rate, data = countyUS)
+confint(mortalUSlm)
+summary(mortalUSlm)
+
+mse = mean(mortalUSlm$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(mortalUSlm$residuals)))
+
+
+par(mfrow = c(2,2)) 
+plot(mortalUSlm)
+```
+
+
+## Testing_Rate Model
+
+```{r}
+testRtUSlm <- lm(Testing_Rate ~ Confirmed + Deaths + Recovered + FIPS + Incident_Rate  + People_Tested  + People_Hospitalized + Mortality_Rate + Hospitalization_Rate, data = countyUS)
+confint(testRtUSlm)
+summary(testRtUSlm)
+
+mse = mean(testRtUSlm$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(testRtUSlm$residuals)))
+
+par(mfrow = c(2,2)) 
+plot(testRtUSlm)
+```
+
+
+
+## Hospitalization_Rate Model
+
+```{r}
+hospRtUSlm <- lm(Hospitalization_Rate ~ Confirmed + Deaths + Recovered + FIPS + Incident_Rate + People_Tested + People_Hospitalized + Mortality_Rate + Testing_Rate, data = countyUS)
+confint(hospRtUSlm)
+summary(hospRtUSlm)
+
+mse = mean(hospRtUSlm$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(hospRtUSlm$residuals)))
+
+
+par(mfrow = c(2,2)) 
+plot(hospRtUSlm)
+```
+
+
+# Linear Regression with COVID-19 STATWORX API
+
+```{r}
+library(httr)
+library(jsonlite) 
+
+payload <- list(code = "US") 
+response <- httr::POST(url = "https://api.statworx.com/covid", body = toJSON(payload, auto_unbox = TRUE), encode = "json") 
+
+content <- rawToChar(response$content) 
+us <- data.frame(fromJSON(content)) 
+str(us) 
+head(us)
+```
+
+## Cumulative Cases Model
+
+```{r}
+confirmSTATlm <- lm(cases_cum ~ day + month + deaths_cum, data = us)
+confint(confirmSTATlm)
+summary(confirmSTATlm)
+
+mse = mean(confirmSTATlm$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(confirmSTATlm$residuals)))
+
+
+par(mfrow = c(2,2)) 
+plot(confirmSTATlm)
+```
+
+
+## Cumulative Deaths Model
+
+```{r}
+deathsSTATlm <- lm(deaths_cum ~ day + month + cases_cum, data = us)
+confint(deathsSTATlm)
+summary(confirmSTATlm)
+
+mse = mean(deathsSTATlm$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(deathsSTATlm$residuals)))
+
+
+par(mfrow = c(2,2)) 
+plot(deathsSTATlm)
+```
+
+
+## Day Model
+
+```{r}
+daySTATlm <- lm(day ~ month + cases_cum + deaths_cum, data = us)
+confint(daySTATlm)
+summary(daySTATlm)
+
+mse = mean(daySTATlm$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(daySTATlm$residuals)))
+
+
+par(mfrow = c(2,2)) 
+plot(daySTATlm)
+```
+
+
+## Month Model
+
+```{r}
+monthSTATlm <- lm(month ~ day + cases_cum + deaths_cum, data = us)
+confint(monthSTATlm)
+summary(monthSTATlm)
+
+mse = mean(monthSTATlm$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(monthSTATlm$residuals)))
+
+
+par(mfrow = c(2,2)) 
+plot(monthSTATlm)
+```
+
+
+# Linear Models from NY Times COVID-19 GitHub
+
+```{r}
+ny_Times_Counties <- read.csv("https://raw.githubusercontent.com/WorldCapital/COVID19-Project/master/COVID-19/nyt-us-counties.csv")
+ny_Times_Counties <- na.omit(ny_Times_Counties)
+str(ny_Times_Counties)
+head(ny_Times_Counties)
+```
+
+
+## Confirmed Model
+
+```{r}
+nyTimesCaseslm <- lm(cases ~ fips + deaths, data = ny_Times_Counties)
+confint(nyTimesCaseslm)
+summary(nyTimesCaseslm)
+
+mse = mean(nyTimesCaseslm$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(nyTimesCaseslm$residuals)))
+
+
+par(mfrow = c(2,2)) 
+plot(nyTimesCaseslm)
+```
+
+## Confirmed Model
+
+### Confirmed Model #2 improved R-Squared
+
+```{r}
+nyTimesCaseslm2 <- lm(cases ~  deaths, data = ny_Times_Counties)
+confint(nyTimesCaseslm2)
+summary(nyTimesCaseslm2)
+
+mse = mean(nyTimesCaseslm2$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(nyTimesCaseslm2$residuals)))
+
+par(mfrow = c(2,2)) 
+plot(nyTimesCaseslm2)
+```
+
+## Deaths Model
+
+```{r}
+nyTimesDeathslm <- lm(deaths ~ fips + cases, data = ny_Times_Counties)
+confint(nyTimesDeathslm)
+summary(nyTimesDeathslm)
+
+mse = mean(nyTimesDeathslm$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(nyTimesDeathslm$residuals)))
+
+par(mfrow = c(2,2)) 
+plot(nyTimesDeathslm)
+```
+
+## Deaths Model #2
+
+```{r}
+nyTimesDeathslm2 <- lm(deaths ~  cases, data = ny_Times_Counties)
+confint(nyTimesDeathslm2)
+summary(nyTimesDeathslm2)
+
+mse = mean(nyTimesDeathslm2$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(nyTimesDeathslm2$residuals)))
+
+par(mfrow = c(2,2)) 
+plot(nyTimesDeathslm2)
+```
+
+
+## FIPS Model
+
+```{r}
+nyTimesFIPSlm <- lm(fips ~  cases + deaths, data = ny_Times_Counties)
+confint(nyTimesFIPSlm)
+summary(nyTimesFIPSlm)
+
+mse = mean(nyTimesFIPSlm$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(nyTimesFIPSlm$residuals)))
+
+par(mfrow = c(2,2)) 
+plot(nyTimesFIPSlm)
+```
+
+# Non-Linear Regressions 
+
+## Non-Linear Transformation of Confirmed onto Recovered -  STATWORX
+
+```{r}
+lm.fit2=lm(cases_cum ∼ deaths_cum + I(deaths_cum^2), data = us) 
+summary(lm.fit2)
+
+mse = mean(lm.fit2$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(lm.fit2$residuals)))
+
+par(mfrow = c(2,2))
+plot(lm.fit2)
+```
+
+## STATWORX NLR #2
+
+```{r}
+lm.fit3=lm(deaths_cum ∼ cases_cum + I(cases_cum^2), data = us) 
+summary(lm.fit3)
+
+mse = mean(lm.fit3$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(lm.fit3$residuals)))
+
+par(mfrow = c(2,2))
+plot(lm.fit3)
+```
+
+
+## Non-Linear Regression of John Hopkins University
+
+```{r}
+nonline_fips <- lm(FIPS ~ Confirmed + Deaths + Recovered + Incident_Rate + People_Tested + People_Hospitalized + Mortality_Rate + Testing_Rate + Hospitalization_Rate + I(FIPS^2), data = countyUS)
+confint(nonline_fips)
+summary(nonline_fips)
+
+mse = mean(nonline_fips$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(nonline_fips$residuals)))
+
+par(mfrow = c(2,2))
+plot(nonline_fips)
+```
+
+
+## Non-Linear Model NY Times using Deaths
+
+```{r}
+nyTimesNLM <- lm(deaths ~ fips + cases, I(cases^2), data = ny_Times_Counties)
+confint(nyTimesNLM)
+summary(nyTimesNLM)
+
+mse = mean(nyTimesNLM$residuals^2)
+print(paste0("MSE= ", mse))
+print(paste0("RMSE= ", RMSE(nyTimesNLM$residuals)))
+
+par(mfrow = c(2,2)) 
+plot(nyTimesNLM)
+```
+
+# Principal COmponent Analysis (PCA)
+
+```{r, warning=FALSE}
+# Principal Component Analysis
+
+countUS <- subset(countyUS, select = -c(Province_State, Last_Update,Country_Region,UID, Lat, Long_, ISO3))
+
+countUS <- na.omit(countUS)
+
+countUS <- transform(countUS, Confirmed = as.numeric(Confirmed), 
+          Deaths = as.numeric(Deaths),
+          Recovered = as.numeric(Recovered),
+          Active = as.numeric(Active),
+          FIPS = as.numeric(FIPS),
+          People_Tested = as.numeric(People_Tested),
+          People_Hospitalized = as.numeric(People_Hospitalized))
+
+apply(countUS, 2, mean)
+
+summary(countUS)
+
+
+
+pr.out = prcomp(countUS, scale = FALSE)
+names(pr.out)                 
+
+
+pr.out$center 
+
+
+pr.out$scale 
+
+
+pr.out$rotation
+
+dim(pr.out$x)
+
+biplot(pr.out, scale =0)
+
+
+pr.out$rotation = -pr.out$rotation 
+pr.out$x = -pr.out$x 
+biplot(pr.out, scale =0) 
+
+
+pr.out$sdev 
+
+pr.var = pr.out$sdev^2 
+pr.var 
+
+pve = pr.var/sum(pr.var) 
+pve 
+
+```
+pve shows variability >1.
