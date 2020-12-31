@@ -1,4 +1,4 @@
-# COVID-19 Final Project Documentation
+# Analyzing COVID-19
 
 <div align="center">
   <img src="https://extension.unh.edu/sites/default/files/field/image/CDC-coronavirus-image-23311-for-web.jpg"><br><br>
