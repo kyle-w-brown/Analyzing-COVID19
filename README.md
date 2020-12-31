@@ -1,6 +1,4 @@
-# DSE 6300 COVID-19 Final Project Documentation
-
-### *By: Kyle W. Brown*
+# COVID-19 Final Project Documentation
 
 <div align="center">
   <img src="https://extension.unh.edu/sites/default/files/field/image/CDC-coronavirus-image-23311-for-web.jpg"><br><br>
@@ -12,7 +10,7 @@ These are the complete source files for
 
 ## Project Proposal
 
-[COVID-19 Project Proposal](https://github.com/WorldCapital/COVID19-Project/blob/master/Kyle_W._Brown_Final_Report_Ppt/COVID19-Project-Proposal/Project-Proposal.pdf) for DSE 6300 was selected based primarily on the timing of the pandemic and its impact to us all and proposed by Kyle W. Brown. This section follows a top down format and structured to indicate contributed work to the overall Project Schedule, goals, deadlines, and success. Words highlighted in blue are hyperlinked to their respective model, markdown file, and Jupyter notebook located in the COVID-19 project GitHub repo. 
+[COVID-19 Project Proposal](https://github.com/WorldCapital/COVID19-Project/blob/master/Kyle_W._Brown_Final_Report_Ppt/COVID19-Project-Proposal/Project-Proposal.pdf) for DSE 6300 was selected based primarily on the timing of the pandemic and its impact to us all. This section follows a top down format and structured to indicate contributed work to the overall Project Schedule, goals, deadlines, and success. Words highlighted in blue are hyperlinked to their respective model, markdown file, and Jupyter notebook located in the COVID-19 project GitHub repo. 
 
 * [Abstract](https://github.com/WorldCapital/COVID19-Project/blob/master/Kyle_W._Brown_Final_Report_Ppt/COVID19-Project-Proposal/Project-Proposal.pdf) design and build a streaming application that provides a model, predictions, and visualization of COVID19 virus data in a Shiny or Tableau dashboard. The objective of our dashboard is implementing a predictive model to identify which factors have the greatest impact on the spread and strength of the COVID-19 virus in a specific geographic area.
 * [Project Objectives](https://github.com/WorldCapital/COVID19-Project/blob/master/Kyle_W._Brown_Final_Report_Ppt/COVID19-Project-Proposal/Project-Proposal.pdf) are building a functional dashboard in Shiny presenting COVID19 virus predictions, stream COVID data using Kafka or Spark Streaming, visualization of predictive analytics model and data, and predictions or time series analysis based on COVID19, environmental, and economic factors.
